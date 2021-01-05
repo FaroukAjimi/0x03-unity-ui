@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
@@ -11,13 +12,18 @@ public class PlayerController : MonoBehaviour
     private int score = 0;
     public int health = 5;
     private Scene scene;
+    public Text scoreText;
     // Start is called before the first frame update
+    void setScoreText(){
+        scoreText.text = string.Format("Score: {0}", this.score);
+    }
     void OnTriggerEnter(Collider other)
     {
         if (other.tag == "Pickup")
         {
+            
             this.score += 1;
-            Debug.Log("Score: " + score);
+            setScoreText();
             other.GetComponent<Renderer>().enabled = false;
             Destroy(other);
         }
