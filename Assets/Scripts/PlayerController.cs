@@ -13,9 +13,13 @@ public class PlayerController : MonoBehaviour
     public int health = 5;
     private Scene scene;
     public Text scoreText;
+    public Text healthText;
     // Start is called before the first frame update
-    void setScoreText(){
+    void SetScoreText(){
         scoreText.text = string.Format("Score: {0}", this.score);
+    }
+    void SetHealthText(){
+        healthText.text = string.Format("Health: {0}", this.health);
     }
     void OnTriggerEnter(Collider other)
     {
@@ -23,14 +27,14 @@ public class PlayerController : MonoBehaviour
         {
             
             this.score += 1;
-            setScoreText();
+            SetScoreText();
             other.GetComponent<Renderer>().enabled = false;
             Destroy(other);
         }
         if (other.tag == "Trap")
         {
             health -= 1;
-            Debug.Log("Health: " + health);
+            SetHealthText();
         }
         if (other.tag == "Goal")
         {
