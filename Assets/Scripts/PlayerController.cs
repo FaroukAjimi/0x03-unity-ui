@@ -14,6 +14,15 @@ public class PlayerController : MonoBehaviour
     private Scene scene;
     public Text scoreText;
     public Text healthText;
+    public Text winloseText;
+    public Image winloseBG;
+    IEnumerator LoadScene(float seconds)
+    {
+        yield return new WaitForSeconds(seconds);
+        health = 5;
+        score = 0;
+        SceneManager.LoadScene(scene.name);
+    }
     // Start is called before the first frame update
     void SetScoreText(){
         scoreText.text = string.Format("Score: {0}", this.score);
@@ -24,8 +33,7 @@ public class PlayerController : MonoBehaviour
     void OnTriggerEnter(Collider other)
     {
         if (other.tag == "Pickup")
-        {
-            
+        {          
             this.score += 1;
             SetScoreText();
             other.GetComponent<Renderer>().enabled = false;
@@ -38,7 +46,11 @@ public class PlayerController : MonoBehaviour
         }
         if (other.tag == "Goal")
         {
-            Debug.Log("You win!");
+            winloseText.color = Color.black;
+            winloseText.text = "You win!";
+            winloseBG.color = Color.green;
+            winloseBG.enabled = true;
+            StartCoroutine(LoadScene(3));
         }
         
     }
@@ -46,16 +58,18 @@ public class PlayerController : MonoBehaviour
     {
         if (health == 0)
         {
-           Debug.Log("Game Over!");
-           health = 5;
-           score = 0;
-           SceneManager.LoadScene(scene.name);
+            winloseText.text = "Game Over!";
+            winloseText.color = Color.white;
+            winloseBG.color = Color.red;
+            winloseBG.enabled = true;
+            StartCoroutine(LoadScene(3));
         }
     }
     void Start()
     {
         scene = SceneManager.GetActiveScene();
         rb = GetComponent<Rigidbody>();
+        winloseBG.enabled = false;
     }
 
     // Update is called once per frame
